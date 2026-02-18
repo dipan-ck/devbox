@@ -9,13 +9,14 @@ actix-web = "4.12.1"
 serde = { version = "1.0.228", features = ["derive"] }
 tokio = { version = "1.49.0", features = ["full"] }
 sqlx = { version = "0.8.6", default-features = false, features = [
-  "runtime-actix-rustls",
+  "runtime-tokio",
   "macros",
   "postgres",
   "uuid",
   "chrono",
   "migrate",
 ] }
+config = "0.15.19"
 [lib]
 path = "src/lib.rs"
 

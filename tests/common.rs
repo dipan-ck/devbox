@@ -1,14 +1,14 @@
 use std::net::TcpListener;
 
-use devbox::run;
+use devbox::{configuration, startup::run};
 
 pub fn spawn_app() -> String {
-    let listener = TcpListener::bind("127.0.0.1:0").expect("'falied to create TCP Listener");
-
-    let port = listener.local_addr().unwrap().port();
+    let configuration = configuration::get_config().expect("error getting configurations");
+    let address = format!("127.0.0.1:{}", configuration.application_port);
+    let listener = TcpListener::bind(&address).expect("'falied to create TCP Listener");
 
     let server = run(listener).expect("something went wrong starting the server");
     tokio::spawn(server);
 
-    format!("http://127.0.0.1:{}", port)
+    format!("http://{}", address)
 }
