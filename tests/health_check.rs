@@ -2,7 +2,7 @@ mod common;
 
 #[tokio::test]
 async fn health_check() {
-    let address = common::spawn_app();
+    let (address, _) = common::spawn_app().await;
 
     let client = reqwest::Client::new();
 
