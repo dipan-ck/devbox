@@ -22,22 +22,23 @@ pub async fn spawn_app() -> (String, PgPool) {
 }
 
 pub async fn configure_db(configs: &mut Settings) -> PgPool {
-    configs.database.database_name = Uuid::new_v4().to_string();
+    configs.database_settings.database_name = Uuid::new_v4().to_string();
     // Create database
-    let mut connection = PgConnection::connect(&configs.database.connection_string_without_db())
-        .await
-        .expect("Failed to connect to Postgres");
+    let mut connection =
+        PgConnection::connect(&configs.database_settings.connection_string_without_db())
+            .await
+            .expect("Failed to connect to Postgres");
 
     //Create database
     sqlx::query(&format!(
         r#"CREATE DATABASE "{}";"#,
-        configs.database.database_name
+        configs.database_settings.database_name
     ))
     .execute(&mut connection)
     .await
     .expect("Failed to create database");
 
-    let connection = PgPool::connect(&configs.database.connection_string())
+    let connection = PgPool::connect(&configs.database_settings.connection_string())
         .await
         .expect("failed to connect to Database");
     sqlx::migrate!("./migrations")
